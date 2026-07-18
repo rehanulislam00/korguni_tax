@@ -1,0 +1,2277 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bangladesh Income Tax Calculator | FY 2025-2026</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================================
+   KORGONI — Bangladesh Income Tax Calculator
+   Design tokens: corporate navy/slate base, single amber-gold accent for
+   tax/money signals, restrained motion, Lexend for display + Inter for
+   body + JetBrains Mono for figures.
+   ========================================================================= */
+
+:root{
+  --bg: #F4F6F9;
+  --bg-elevated: #FFFFFF;
+  --bg-subtle: #ECEFF4;
+  --ink: #131B2E;
+  --ink-soft: #4A5568;
+  --ink-faint: #8993A6;
+  --border: #DDE3EC;
+  --navy: #0F1F3D;
+  --navy-700: #16294D;
+  --navy-600: #1D3461;
+  --accent: #C68A1F;
+  --accent-strong: #A8730F;
+  --accent-soft: #FBF1DD;
+  --positive: #1F8A5F;
+  --positive-soft: #E5F5EE;
+  --danger: #C0392B;
+  --danger-soft: #FBEAE7;
+  --shadow-sm: 0 1px 2px rgba(15,31,61,.06), 0 1px 1px rgba(15,31,61,.04);
+  --shadow-md: 0 8px 24px rgba(15,31,61,.10);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --font-display: 'Lexend', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme="dark"]{
+  --bg: #0B121F;
+  --bg-elevated: #131C2E;
+  --bg-subtle: #0F1828;
+  --ink: #EAF0FB;
+  --ink-soft: #AAB6CC;
+  --ink-faint: #6E7A93;
+  --border: #243153;
+  --navy: #0A1326;
+  --navy-700: #101D38;
+  --navy-600: #16294D;
+  --accent: #E0A93D;
+  --accent-strong: #F0C268;
+  --accent-soft: #2B2310;
+  --positive: #3FC089;
+  --positive-soft: #10261D;
+  --danger: #E36A5A;
+  --danger-soft: #2A1414;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 12px 28px rgba(0,0,0,.45);
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  transition: background-color .25s ease, color .25s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+h1,h2,h3,.brand-title{ font-family: var(--font-display); }
+
+/* ---------------------------- NAVBAR ---------------------------- */
+.app-navbar{
+  background: var(--navy);
+  padding: .65rem 0;
+  box-shadow: var(--shadow-sm);
+  z-index: 1030;
+}
+.brand-mark{
+  width: 38px; height: 38px;
+  display: grid; place-items: center;
+  background: linear-gradient(145deg, var(--accent), var(--accent-strong));
+  color: var(--navy);
+  border-radius: 10px;
+  font-size: 1.05rem;
+}
+.brand-text{ display: flex; flex-direction: column; line-height: 1.1; }
+.brand-title{ color: #fff; font-weight: 700; font-size: 1.08rem; letter-spacing: .2px; }
+.brand-sub{ color: #9FB0CE; font-size: .68rem; font-weight: 500; }
+.fy-badge{
+  background: rgba(255,255,255,.07);
+  color: #C9D5EA;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  font-size: .76rem;
+  padding: .35rem .75rem;
+  align-items: center;
+  gap: .4rem;
+}
+.theme-toggle-btn{
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.14);
+  display: grid; place-items: center;
+  transition: background .2s ease, transform .2s ease;
+}
+.theme-toggle-btn:hover{ background: rgba(255,255,255,.16); transform: translateY(-1px); }
+
+/* ---------------------------- HERO ---------------------------- */
+.app-hero{
+  background: linear-gradient(165deg, var(--navy) 0%, var(--navy-600) 70%, var(--navy-700) 100%);
+  color: #fff;
+  padding: 3.2rem 0 3.6rem;
+  position: relative;
+  overflow: hidden;
+}
+.app-hero::after{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(198,138,31,.20), transparent 45%),
+    radial-gradient(circle at 10% 90%, rgba(255,255,255,.05), transparent 40%);
+  pointer-events:none;
+}
+.eyebrow{
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  display:flex; align-items:center; gap:.4rem;
+  margin-bottom: .9rem;
+}
+.hero-title{
+  font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+  font-weight: 700;
+  line-height: 1.18;
+  margin-bottom: 1rem;
+}
+.hero-lede{
+  color: #C3CEE3;
+  font-size: 1.02rem;
+  max-width: 540px;
+  margin-bottom: 0;
+}
+.hero-stat-card{
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.5rem;
+  backdrop-filter: blur(6px);
+}
+.hero-stat-row{
+  display:flex; justify-content:space-between; align-items:center;
+  padding: .65rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.hero-stat-row:last-child{ border-bottom: none; }
+.hero-stat-label{ color:#A9B7D1; font-size:.86rem; }
+.hero-stat-value{ font-family: var(--font-mono); color: var(--accent-strong); font-weight:600; font-size:1.02rem; }
+
+/* ---------------------------- MAIN / CARDS ---------------------------- */
+.app-main{ padding-top: 2.2rem; padding-bottom: 3rem; }
+
+.app-card{
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  animation: cardRise .35s ease both;
+}
+@keyframes cardRise{
+  from{ opacity:0; transform: translateY(6px); }
+  to{ opacity:1; transform: translateY(0); }
+}
+.app-card-header{
+  display:flex; align-items:center; gap:.7rem;
+  padding: 1.05rem 1.3rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+.app-card-header h2{ font-size: 1.05rem; font-weight:600; margin:0; color: var(--ink); }
+.app-card-header h3{ font-size: .94rem; font-weight:600; margin:0; color: var(--ink); display:flex; align-items:center; gap:.5rem; }
+.app-card-header-sm{ padding: .85rem 1.2rem; }
+.app-card-header-sm i{ color: var(--accent-strong); }
+.app-card-body{ padding: 1.3rem; }
+
+.step-chip{
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 700;
+  display:grid; place-items:center;
+  flex-shrink:0;
+}
+
+.section-label{
+  font-size: .78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--ink-faint);
+  margin-bottom: .8rem;
+  margin-top: .2rem;
+}
+.text-muted-sm{ color: var(--ink-faint); font-size: .76rem; font-weight:400; text-transform:none; letter-spacing:0; }
+
+/* ---------------------------- FORM CONTROLS ---------------------------- */
+.form-label{ font-size: .84rem; font-weight: 500; color: var(--ink-soft); margin-bottom: .35rem; }
+.form-control, .form-select{
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  border-radius: var(--radius-sm);
+  padding: .55rem .8rem;
+  font-size: .92rem;
+}
+.form-control:focus, .form-select:focus{
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(198,138,31,.16);
+  background: var(--bg-elevated);
+  color: var(--ink);
+}
+.bdt-group .input-group-text{
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  color: var(--ink-soft);
+  font-weight: 600;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+.bdt-group .form-control{ border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-family: var(--font-mono); }
+.money-input.is-invalid{ border-color: var(--danger) !important; }
+.form-check-input:checked{ background-color: var(--navy); border-color: var(--navy); }
+
+/* ---------------------------- ACTION BAR ---------------------------- */
+.action-bar{ position: sticky; bottom: 0; padding-top: .5rem; }
+.btn-primary-action{
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: .68rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: .92rem;
+  display:inline-flex; align-items:center; gap:.5rem;
+  transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
+}
+.btn-primary-action:hover{ background: var(--navy-600); transform: translateY(-1px); box-shadow: var(--shadow-md); color:#fff; }
+.btn-ghost-action{
+  background: var(--bg-elevated);
+  color: var(--ink-soft);
+  border: 1px solid var(--border);
+  padding: .68rem 1.2rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: .92rem;
+  display:inline-flex; align-items:center; gap:.5rem;
+  transition: border-color .2s ease, color .2s ease, transform .15s ease;
+}
+.btn-ghost-action:hover{ border-color: var(--accent); color: var(--accent-strong); transform: translateY(-1px); }
+
+/* ---------------------------- RESULTS ---------------------------- */
+.result-empty{
+  padding: 3rem 1.6rem;
+  border-style: dashed;
+}
+.empty-icon{ font-size: 2.4rem; color: var(--ink-faint); margin-bottom: 1rem; display:block; }
+.result-empty h3{ font-size: 1.05rem; font-weight:600; margin-bottom:.5rem; }
+
+.result-hero{
+  background: linear-gradient(155deg, var(--navy) 0%, var(--navy-600) 100%);
+  color: #fff;
+  padding: 1.6rem 1.5rem;
+  text-align: center;
+  position: relative;
+}
+.result-hero-label{
+  display:block;
+  font-size: .8rem;
+  color: #A9B7D1;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-weight: 600;
+  margin-bottom: .4rem;
+}
+.result-hero-value{
+  display:block;
+  font-family: var(--font-mono);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+  letter-spacing: -.01em;
+  margin-bottom: 1rem;
+}
+.result-hero-tools{ display:flex; justify-content:center; gap:.5rem; }
+.btn-tool{
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  color: #fff;
+  display:grid; place-items:center;
+  transition: background .2s ease, transform .15s ease;
+}
+.btn-tool:hover{ background: rgba(255,255,255,.18); color:#fff; transform: translateY(-1px); }
+
+.kv-row{
+  display:flex; justify-content:space-between; align-items:center;
+  padding: .55rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: .9rem;
+}
+.kv-row:last-child{ border-bottom: none; }
+.kv-row span{ color: var(--ink-soft); }
+.kv-row strong{ font-family: var(--font-mono); font-weight:600; color: var(--ink); }
+.kv-total strong{ color: var(--navy-600); }
+[data-theme="dark"] .kv-total strong{ color: #fff; }
+.kv-positive strong{ color: var(--positive); }
+.kv-final{ border-top: 2px solid var(--border); margin-top:.3rem; padding-top:.8rem; }
+.kv-final strong{ font-size: 1.05rem; color: var(--accent-strong); }
+
+.chart-caption{
+  text-align:center; font-size:.78rem; color: var(--ink-faint);
+  margin-top:.4rem; margin-bottom:0; font-weight:500;
+}
+
+.app-table{ font-size: .86rem; margin-bottom:0; color: var(--ink); }
+.app-table thead th{
+  background: var(--bg-subtle);
+  color: var(--ink-faint);
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  font-weight:600;
+  border-bottom: 1px solid var(--border);
+  padding: .65rem 1.1rem;
+}
+.app-table td{
+  padding: .6rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink-soft);
+}
+.app-table td strong{ color: var(--ink); font-family: var(--font-mono); }
+.app-table tbody tr:last-child td{ border-bottom: none; }
+.app-table tfoot td{ font-weight:600; color: var(--ink); background: var(--bg-subtle); }
+
+.suggestion-card .app-card-header-sm{ background: var(--accent-soft); }
+.suggestion-card .app-card-header-sm i{ color: var(--accent-strong); }
+.progress{ background: var(--bg-subtle); border-radius: 999px; }
+.progress-bar{ background: linear-gradient(90deg, var(--accent), var(--accent-strong)); }
+
+/* ---------------------------- TOAST ---------------------------- */
+.toast{ background: var(--navy); color:#fff; border:none; }
+.toast-body{ font-size: .88rem; }
+
+/* ---------------------------- RESPONSIVE ---------------------------- */
+@media (max-width: 991.98px){
+  .app-hero{ padding: 2.4rem 0 2.8rem; }
+  .action-bar{ position: static; }
+}
+@media (max-width: 575.98px){
+  .result-hero-value{ font-size: 1.7rem; }
+  .app-card-body{ padding: 1rem; }
+}
+
+/* ---------------------------- PRINT ---------------------------- */
+@media print{
+  .app-navbar, .app-hero, #taxForm, .action-bar, footer, .result-hero-tools, .toast-container, #uploadPanel, #tinExtraCard{ display:none !important; }
+  #printArea{ display:block !important; }
+  body{ background:#fff; color:#000; }
+}
+
+
+/* ===== UPLOAD PANEL STYLES ===== */
+.upload-panel{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.5rem}
+.upload-panel-header{display:flex;align-items:center;gap:.7rem;padding:1rem 1.3rem;border-bottom:1px solid var(--border);background:linear-gradient(135deg,var(--navy) 0%,var(--navy-600) 100%);color:#fff}
+.upload-panel-header h2{font-size:1rem;font-weight:600;margin:0;color:#fff;font-family:var(--font-display)}
+.ai-badge{margin-left:auto;background:rgba(198,138,31,.25);border:1px solid rgba(198,138,31,.4);color:var(--accent-strong);font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:999px;letter-spacing:.04em;text-transform:uppercase}
+[data-theme="dark"] .ai-badge{background:rgba(224,169,61,.18);border-color:rgba(224,169,61,.35);color:var(--accent-strong)}
+.upload-tabs{display:flex;background:var(--bg-subtle);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.upload-tabs::-webkit-scrollbar{display:none}
+.upload-tab{flex:1;min-width:90px;padding:.7rem .3rem;font-size:.77rem;font-weight:600;color:var(--ink-faint);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap;text-align:center}
+.upload-tab:hover{color:var(--ink-soft)}
+.upload-tab.active{color:var(--accent-strong);border-bottom-color:var(--accent-strong);background:var(--bg-elevated)}
+.upload-tab i{margin-right:.3rem}
+.upload-body{padding:1.1rem}
+.drop-zone{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1.6rem 1rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:var(--bg-subtle);position:relative;overflow:hidden}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--accent);background:var(--accent-soft)}
+.drop-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2}
+.drop-zone-icon{font-size:1.7rem;color:var(--ink-faint);margin-bottom:.45rem;display:block}
+.drop-zone p{margin:0;font-size:.86rem;color:var(--ink-soft)}
+.drop-zone p strong{color:var(--accent-strong)}
+.drop-zone .file-types{font-size:.74rem;color:var(--ink-faint);margin-top:.25rem}
+.proc-box{display:none;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;text-align:center;margin-top:.8rem}
+.proc-box.active{display:block}
+.proc-spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto .7rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.proc-step{font-size:.85rem;color:var(--ink-soft)}
+.proc-step strong{color:var(--ink)}
+.review-box{display:none;margin-top:.9rem}
+.review-box.active{display:block}
+.review-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem}
+.review-hdr h4{font-size:.88rem;font-weight:600;margin:0;color:var(--positive);display:flex;align-items:center;gap:.4rem}
+.ext-fields{display:flex;flex-direction:column;gap:.45rem;max-height:320px;overflow-y:auto;padding-right:.2rem}
+.ext-field{display:flex;align-items:flex-start;gap:.5rem;background:var(--bg-subtle);border:1px solid var(--border);border-radius:8px;padding:.5rem .7rem}
+.ext-field.low-conf{border-color:var(--accent);background:var(--accent-soft)}
+.ext-label{font-size:.7rem;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.03em;white-space:nowrap;width:125px;flex-shrink:0;padding-top:.28rem}
+.ext-input{flex:1;background:var(--bg-elevated);border:1px solid var(--border);color:var(--ink);border-radius:6px;padding:.3rem .55rem;font-size:.84rem;font-family:var(--font-body);width:100%}
+.ext-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(198,138,31,.15)}
+.conf-badge{font-size:.63rem;font-weight:700;padding:.12rem .38rem;border-radius:4px;white-space:nowrap;align-self:flex-start;margin-top:.3rem;flex-shrink:0}
+.conf-ok{background:var(--positive-soft);color:var(--positive)}
+.conf-warn{background:var(--accent-soft);color:var(--accent-strong)}
+.conf-miss{background:var(--danger-soft);color:var(--danger)}
+.apply-btn{width:100%;margin-top:.7rem;background:var(--positive);color:#fff;border:none;padding:.6rem 1rem;border-radius:var(--radius-sm);font-weight:600;font-size:.88rem;display:flex;align-items:center;justify-content:center;gap:.5rem;cursor:pointer;transition:opacity .2s,transform .15s}
+.apply-btn:hover{opacity:.88;transform:translateY(-1px)}
+.err-box{display:none;background:var(--danger-soft);border:1px solid var(--danger);border-radius:var(--radius-sm);padding:.65rem .9rem;margin-top:.7rem;font-size:.84rem;color:var(--danger);align-items:center;gap:.45rem}
+.err-box.active{display:flex}
+.doc-lib{margin-top:1rem;display:flex;flex-direction:column;gap:.4rem}
+.doc-item{display:flex;align-items:center;gap:.55rem;background:var(--bg-subtle);border:1px solid var(--border);border-radius:8px;padding:.45rem .7rem}
+.doc-item-icon{color:var(--accent-strong);font-size:.95rem;flex-shrink:0}
+.doc-item-info{flex:1;min-width:0}
+.doc-item-name{font-size:.82rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-item-meta{font-size:.7rem;color:var(--ink-faint)}
+.doc-item-btns{display:flex;gap:.3rem}
+.doc-item-btn{width:26px;height:26px;border-radius:6px;background:none;border:1px solid var(--border);color:var(--ink-soft);cursor:pointer;display:grid;place-items:center;font-size:.72rem;transition:background .15s,color .15s}
+.doc-item-btn:hover{background:var(--bg-elevated);color:var(--ink)}
+.doc-item-btn.del:hover{background:var(--danger-soft);color:var(--danger);border-color:var(--danger)}
+.doc-type-badge{font-size:.67rem;font-weight:700;padding:.12rem .4rem;border-radius:4px;text-transform:uppercase;letter-spacing:.03em}
+.badge-tin{background:#E8F0FE;color:#3367D6}
+.badge-salary{background:var(--positive-soft);color:var(--positive)}
+.badge-bank{background:#FEF3C7;color:#92400E}
+.badge-gpf{background:#F3E8FF;color:#7C3AED}
+[data-theme="dark"] .badge-tin{background:#1a2a4d;color:#7aabff}
+[data-theme="dark"] .badge-bank{background:#2d2200;color:#f0c268}
+[data-theme="dark"] .badge-gpf{background:#1f0d3a;color:#c084fc}
+.tin-card{display:none}
+.tin-card.visible{display:block}
+.is-valid{border-color:var(--positive)!important;transition:border-color .3s}
+
+
+/* ===== TIN UPLOAD INSIDE PERSONAL INFO CARD ===== */
+.tin-upload-zone{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1.1rem 1rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:var(--bg-subtle);position:relative;overflow:hidden;margin-bottom:0}
+.tin-upload-zone:hover,.tin-upload-zone.dragover{border-color:var(--accent);background:var(--accent-soft)}
+.tin-upload-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2}
+.tin-upload-zone .uz-icon{font-size:1.4rem;color:var(--accent-strong);margin-bottom:.3rem;display:block}
+.tin-upload-zone .uz-title{font-size:.86rem;font-weight:600;color:var(--ink);margin-bottom:.1rem}
+.tin-upload-zone .uz-sub{font-size:.74rem;color:var(--ink-faint)}
+.tin-upload-zone.has-file{border-color:var(--positive);background:var(--positive-soft)}
+.tin-upload-zone.has-file .uz-icon{color:var(--positive)}
+
+.tin-proc{display:none;align-items:center;gap:.65rem;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.65rem .9rem;margin-top:.7rem}
+.tin-proc.active{display:flex}
+.tin-spinner{width:20px;height:20px;flex-shrink:0;border:2.5px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+.tin-proc-text{font-size:.83rem;color:var(--ink-soft)}
+.tin-proc-text strong{color:var(--ink)}
+
+.tin-err{display:none;align-items:center;gap:.5rem;background:var(--danger-soft);border:1px solid var(--danger);border-radius:var(--radius-sm);padding:.6rem .85rem;margin-top:.7rem;font-size:.82rem;color:var(--danger)}
+.tin-err.active{display:flex}
+
+.tin-autofill-badge{display:inline-flex;align-items:center;gap:.3rem;background:var(--positive-soft);border:1px solid var(--positive);border-radius:6px;padding:.15rem .5rem;font-size:.72rem;font-weight:700;color:var(--positive);margin-left:.4rem;vertical-align:middle}
+.field-autofilled{border-color:var(--positive)!important;background:var(--positive-soft)!important;transition:border-color .4s,background .4s}
+[data-theme="dark"] .field-autofilled{background:rgba(31,138,95,.12)!important}
+
+.tin-success-bar{display:none;align-items:center;justify-content:space-between;gap:.5rem;background:var(--positive-soft);border:1px solid var(--positive);border-radius:var(--radius-sm);padding:.6rem .9rem;margin-top:.7rem}
+.tin-success-bar.active{display:flex}
+.tin-success-bar span{font-size:.82rem;color:var(--positive);font-weight:600;display:flex;align-items:center;gap:.4rem}
+.tin-success-bar button{background:none;border:1px solid var(--positive);color:var(--positive);border-radius:6px;font-size:.74rem;padding:.2rem .55rem;cursor:pointer;font-weight:600;transition:background .15s}
+.tin-success-bar button:hover{background:var(--positive);color:#fff}
+
+.tin-divider{display:flex;align-items:center;gap:.6rem;margin:.8rem 0}
+.tin-divider::before,.tin-divider::after{content:"";flex:1;height:1px;background:var(--border)}
+.tin-divider span{font-size:.74rem;font-weight:600;color:var(--ink-faint);white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+
+.personal-fields-label{font-size:.76rem;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem}
+
+</style>
+</head>
+<body>
+
+<!-- ============================== NAVBAR ============================== -->
+<nav class="navbar navbar-expand-lg app-navbar sticky-top">
+  <div class="container-fluid px-3 px-lg-4">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+      <span class="brand-mark"><i class="fa-solid fa-scale-balanced"></i></span>
+      <span class="brand-text">
+        <span class="brand-title">KorGoni</span>
+        <span class="brand-sub">Bangladesh Income Tax Calculator</span>
+      </span>
+    </a>
+    <div class="d-flex align-items-center gap-2">
+      <span class="fy-badge d-none d-sm-inline-flex"><i class="fa-regular fa-calendar"></i> IY 2025-26 &middot; AY 2026-27</span>
+      <button id="themeToggle" class="btn theme-toggle-btn" type="button" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================== HERO ============================== -->
+<header class="app-hero">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <p class="eyebrow"><i class="fa-solid fa-landmark-dome"></i> NBR-aligned &middot; Updated for FY 2025-2026</p>
+        <h1 class="hero-title">Know your tax before<br>the NBR does.</h1>
+        <p class="hero-lede">Enter your salary, allowances, and investments once. Get an instant, slab-by-slab breakdown of what you owe &mdash; built for employees, executives, managers, and professionals filing in Bangladesh.</p>
+      </div>
+      <div class="col-lg-5 d-none d-lg-block">
+        <div class="hero-stat-card">
+          <div class="hero-stat-row">
+            <span class="hero-stat-label">Tax-free threshold (general)</span>
+            <span class="hero-stat-value">৳3,75,000</span>
+          </div>
+          <div class="hero-stat-row">
+            <span class="hero-stat-label">Top marginal rate</span>
+            <span class="hero-stat-value">30%</span>
+          </div>
+          <div class="hero-stat-row">
+            <span class="hero-stat-label">Max investment rebate</span>
+            <span class="hero-stat-value">৳10,00,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================== MAIN ============================== -->
+<main class="container app-main">
+  <div class="row g-4">
+
+    <!-- ----------------------- INPUT COLUMN ----------------------- -->
+    <div class="col-lg-7">
+
+        <!-- ===== SMART DOCUMENT IMPORT (outside <form> so it's always visible) ===== -->
+        <div class="upload-panel" id="uploadPanel">
+          <div class="upload-panel-header">
+            <span class="step-chip" style="background:rgba(255,255,255,.14);color:#fff;font-size:.85rem">
+              <i class="fa-solid fa-robot"></i>
+            </span>
+            <h2>Smart Document Import</h2>
+            <span class="ai-badge"><i class="fa-solid fa-sparkles"></i>&nbsp;AI Powered</span>
+          </div>
+          <div class="upload-tabs" id="uploadTabs">
+            <button class="upload-tab active" data-tab="tin"><i class="fa-solid fa-id-card"></i>TIN Cert</button>
+            <button class="upload-tab" data-tab="salary"><i class="fa-solid fa-file-lines"></i>Salary</button>
+            <button class="upload-tab" data-tab="bank"><i class="fa-solid fa-building-columns"></i>Bank</button>
+            <button class="upload-tab" data-tab="gpf"><i class="fa-solid fa-piggy-bank"></i>GPF</button>
+          </div>
+          <div class="upload-body">
+
+            <!-- TIN Tab -->
+            <div class="upload-tab-panel" id="tabp-tin">
+              <div class="drop-zone" id="dz-tin">
+                <input type="file" id="file-tin" accept=".pdf,image/*">
+                <span class="drop-zone-icon"><i class="fa-solid fa-id-card"></i></span>
+                <p>Drop <strong>TIN Certificate</strong> here or click to browse</p>
+                <p class="file-types">PDF · JPG · PNG &nbsp;|&nbsp; Max 10 MB</p>
+              </div>
+              <div class="proc-box" id="proc-tin"><div class="proc-spinner"></div><div class="proc-step" id="ps-tin">Analysing…</div></div>
+              <div class="err-box" id="err-tin"><i class="fa-solid fa-circle-exclamation"></i><span id="em-tin"></span></div>
+              <div class="review-box" id="rv-tin">
+                <div class="review-hdr">
+                  <h4><i class="fa-solid fa-circle-check"></i> Extracted — Review &amp; Edit</h4>
+                  <button class="btn btn-ghost-action btn-sm py-1 px-2" style="font-size:.76rem" onclick="DU.clear('tin')"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="ext-fields" id="ef-tin"></div>
+                <button class="apply-btn" onclick="DU.apply('tin')"><i class="fa-solid fa-wand-magic-sparkles"></i> Apply to Form</button>
+              </div>
+            </div>
+
+            <!-- Salary Tab -->
+            <div class="upload-tab-panel d-none" id="tabp-salary">
+              <div class="drop-zone" id="dz-salary">
+                <input type="file" id="file-salary" accept=".pdf,.xlsx,.xls,.csv">
+                <span class="drop-zone-icon"><i class="fa-solid fa-file-lines"></i></span>
+                <p>Drop <strong>Salary Statement</strong> here or click to browse</p>
+                <p class="file-types">PDF · Excel · CSV &nbsp;|&nbsp; Max 10 MB</p>
+              </div>
+              <div class="proc-box" id="proc-salary"><div class="proc-spinner"></div><div class="proc-step" id="ps-salary">Analysing…</div></div>
+              <div class="err-box" id="err-salary"><i class="fa-solid fa-circle-exclamation"></i><span id="em-salary"></span></div>
+              <div class="review-box" id="rv-salary">
+                <div class="review-hdr">
+                  <h4><i class="fa-solid fa-circle-check"></i> Extracted — Review &amp; Edit</h4>
+                  <button class="btn btn-ghost-action btn-sm py-1 px-2" style="font-size:.76rem" onclick="DU.clear('salary')"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="ext-fields" id="ef-salary"></div>
+                <button class="apply-btn" onclick="DU.apply('salary')"><i class="fa-solid fa-wand-magic-sparkles"></i> Apply to Form</button>
+              </div>
+            </div>
+
+            <!-- Bank Tab -->
+            <div class="upload-tab-panel d-none" id="tabp-bank">
+              <div class="drop-zone" id="dz-bank">
+                <input type="file" id="file-bank" accept=".pdf,.xlsx,.xls,.csv">
+                <span class="drop-zone-icon"><i class="fa-solid fa-building-columns"></i></span>
+                <p>Drop <strong>Bank Statement</strong> here or click to browse</p>
+                <p class="file-types">PDF · Excel · CSV &nbsp;|&nbsp; Max 10 MB</p>
+              </div>
+              <div class="proc-box" id="proc-bank"><div class="proc-spinner"></div><div class="proc-step" id="ps-bank">Analysing…</div></div>
+              <div class="err-box" id="err-bank"><i class="fa-solid fa-circle-exclamation"></i><span id="em-bank"></span></div>
+              <div class="review-box" id="rv-bank">
+                <div class="review-hdr">
+                  <h4><i class="fa-solid fa-circle-check"></i> Extracted — Review &amp; Edit</h4>
+                  <button class="btn btn-ghost-action btn-sm py-1 px-2" style="font-size:.76rem" onclick="DU.clear('bank')"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="ext-fields" id="ef-bank"></div>
+                <button class="apply-btn" onclick="DU.apply('bank')"><i class="fa-solid fa-wand-magic-sparkles"></i> Apply to Form</button>
+              </div>
+            </div>
+
+            <!-- GPF Tab -->
+            <div class="upload-tab-panel d-none" id="tabp-gpf">
+              <div class="drop-zone" id="dz-gpf">
+                <input type="file" id="file-gpf" accept=".pdf,.xlsx,.xls,.csv">
+                <span class="drop-zone-icon"><i class="fa-solid fa-piggy-bank"></i></span>
+                <p>Drop <strong>GPF Statement</strong> here or click to browse</p>
+                <p class="file-types">PDF · Excel · CSV &nbsp;|&nbsp; Max 10 MB</p>
+              </div>
+              <div class="proc-box" id="proc-gpf"><div class="proc-spinner"></div><div class="proc-step" id="ps-gpf">Analysing…</div></div>
+              <div class="err-box" id="err-gpf"><i class="fa-solid fa-circle-exclamation"></i><span id="em-gpf"></span></div>
+              <div class="review-box" id="rv-gpf">
+                <div class="review-hdr">
+                  <h4><i class="fa-solid fa-circle-check"></i> Extracted — Review &amp; Edit</h4>
+                  <button class="btn btn-ghost-action btn-sm py-1 px-2" style="font-size:.76rem" onclick="DU.clear('gpf')"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="ext-fields" id="ef-gpf"></div>
+                <button class="apply-btn" onclick="DU.apply('gpf')"><i class="fa-solid fa-wand-magic-sparkles"></i> Apply to Form</button>
+              </div>
+            </div>
+
+            <!-- Shared doc library -->
+            <div id="docLib" style="display:none;margin-top:1rem">
+              <p class="section-label" style="margin-bottom:.5rem">Uploaded Documents</p>
+              <div class="doc-lib" id="docLibList"></div>
+            </div>
+
+          </div>
+        </div>
+
+      <form id="taxForm" novalidate>
+
+        <!-- Personal Information -->
+        <section class="app-card mb-4" data-step="1">
+          <div class="app-card-header">
+            <span class="step-chip">1</span>
+            <h2>Personal Information</h2>
+          </div>
+          <div class="app-card-body">
+
+            <!-- TIN Upload zone -->
+            <p class="personal-fields-label"><i class="fa-solid fa-id-card"></i> Auto-fill from TIN Certificate</p>
+            <div class="tin-upload-zone" id="tinUploadZone">
+              <input type="file" id="tinFile" accept=".pdf,image/jpeg,image/png,image/webp">
+              <span class="uz-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+              <div class="uz-title">Upload TIN Certificate PDF or Image</div>
+              <div class="uz-sub">PDF · JPG · PNG &nbsp;·&nbsp; Max 10 MB &nbsp;·&nbsp; AI will auto-fill the fields below</div>
+            </div>
+
+            <!-- Processing indicator -->
+            <div class="tin-proc" id="tinProc">
+              <div class="tin-spinner"></div>
+              <div class="tin-proc-text" id="tinProcText"><strong>Reading TIN certificate…</strong></div>
+            </div>
+
+            <!-- Error message -->
+            <div class="tin-err" id="tinErr">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span id="tinErrMsg">Could not read document.</span>
+            </div>
+
+            <!-- Success bar (shown after extraction) -->
+            <div class="tin-success-bar" id="tinSuccessBar">
+              <span><i class="fa-solid fa-circle-check"></i> Fields auto-filled from TIN — review &amp; edit below</span>
+              <button onclick="TinUpload.clear()">Clear &amp; Reset</button>
+            </div>
+
+            <!-- Divider -->
+            <div class="tin-divider"><span>or fill in manually</span></div>
+
+            <!-- Personal fields grid -->
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="taxpayerName" placeholder="e.g. Mohammad Rahman">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">TIN Number</label>
+                <input type="text" class="form-control" id="tinNumber" placeholder="12-digit TIN">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Gender</label>
+                <select class="form-select" id="gender" required>
+                  <option value="male" selected>Male</option>
+                  <option value="female">Female</option>
+                  <option value="third_gender">Third Gender</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Age</label>
+                <input type="number" class="form-control" id="age" min="18" max="100" value="30" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Resident Status</label>
+                <select class="form-select" id="residentStatus">
+                  <option value="resident" selected>Resident</option>
+                  <option value="non_resident">Non-Resident</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Father's Name</label>
+                <input type="text" class="form-control" id="fatherName" placeholder="—">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Mother's Name</label>
+                <input type="text" class="form-control" id="motherName" placeholder="—">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Spouse's Name</label>
+                <input type="text" class="form-control" id="spouseName" placeholder="— (if applicable)">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Date of Birth</label>
+                <input type="text" class="form-control" id="dob" placeholder="DD/MM/YYYY">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">National ID (NID)</label>
+                <input type="text" class="form-control" id="nid" placeholder="—">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Tax Circle</label>
+                <input type="text" class="form-control" id="taxCircle" placeholder="—">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Tax Zone</label>
+                <input type="text" class="form-control" id="taxZone" placeholder="—">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Current Address</label>
+                <textarea class="form-control" id="currentAddress" rows="2" placeholder="—"></textarea>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Permanent Address</label>
+                <textarea class="form-control" id="permanentAddress" rows="2" placeholder="—"></textarea>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check form-switch pt-1">
+                  <input class="form-check-input" type="checkbox" id="isDisabled">
+                  <label class="form-check-label" for="isDisabled">Person with disability</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check form-switch pt-1">
+                  <input class="form-check-input" type="checkbox" id="isNewTaxpayer">
+                  <label class="form-check-label" for="isNewTaxpayer">Filing for the first time</label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- Income Information -->
+        <section class="app-card mb-4" data-step="2">
+          <div class="app-card-header">
+            <span class="step-chip">2</span>
+            <h2>Income Information</h2>
+          </div>
+          <div class="app-card-body">
+            <p class="section-label">Salary &amp; Allowances <span class="text-muted-sm">(monthly basic, annual for the rest)</span></p>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6"><label class="form-label">Basic Salary (Monthly)</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="basicSalary" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">House Rent Allowance</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="houseRent" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Medical Allowance</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="medical" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Conveyance Allowance</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="conveyance" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Festival Bonus</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="festivalBonus" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Performance Bonus</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="performanceBonus" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Overtime Income</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="overtime" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Other Allowances</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="otherAllowances" value="0"></div></div>
+            </div>
+
+            <p class="section-label">Other Income Sources <span class="text-muted-sm">(annual)</span></p>
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label">Business Income</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="businessIncome" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Rental Income</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="rentalIncome" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Freelancing Income</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="freelancingIncome" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Foreign Income</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="foreignIncome" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Other Income</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="otherIncome" value="0"></div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Investment & Tax Rebate -->
+        <section class="app-card mb-4" data-step="3">
+          <div class="app-card-header">
+            <span class="step-chip">3</span>
+            <h2>Investment &amp; Tax Rebate</h2>
+          </div>
+          <div class="app-card-body">
+            <p class="section-label">Eligible Investments <span class="text-muted-sm">(annual)</span></p>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6"><label class="form-label">DPS</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="dps" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Life Insurance Premium</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="lifeInsurance" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Provident Fund</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="providentFund" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Approved Investments</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="approvedInvestments" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Government Savings Certificates</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="govSavingsCertificates" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Zakat Donation</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="zakatDonation" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">Approved Donations</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="approvedDonations" value="0"></div></div>
+            </div>
+
+            <p class="section-label">Tax Deducted at Source</p>
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label">Tax Already Paid</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="taxAlreadyPaid" value="0"></div></div>
+              <div class="col-md-6"><label class="form-label">TDS Deducted</label><div class="input-group bdt-group"><span class="input-group-text">৳</span><input type="text" inputmode="numeric" class="form-control money-input" id="tdsDeducted" value="0"></div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Actions -->
+        <div class="d-flex flex-wrap gap-2 mb-5 action-bar">
+          <button type="submit" class="btn btn-primary-action"><i class="fa-solid fa-calculator"></i> Calculate Tax</button>
+          <button type="button" id="resetBtn" class="btn btn-ghost-action"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          <button type="button" id="saveBtn" class="btn btn-ghost-action"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+          <button type="button" id="loadBtn" class="btn btn-ghost-action"><i class="fa-solid fa-folder-open"></i> Load Saved</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ----------------------- RESULT COLUMN ----------------------- -->
+    <div class="col-lg-5">
+      <div id="resultWrapper" class="position-sticky" style="top: 90px;">
+
+        <!-- Empty state -->
+        <div id="emptyState" class="app-card result-empty text-center">
+          <i class="fa-solid fa-receipt empty-icon"></i>
+          <h3>Your tax summary appears here</h3>
+          <p class="text-muted-sm mb-0">Fill in your income details and press Calculate Tax to see a full breakdown, charts, and rebate suggestions.</p>
+        </div>
+
+        <!-- Results (hidden until first calculation) -->
+        <div id="resultsArea" class="d-none">
+
+          <!-- Net tax hero card -->
+          <div class="app-card result-hero mb-3">
+            <span class="result-hero-label">Net Tax Payable</span>
+            <span class="result-hero-value" id="rNetTax">৳0</span>
+            <div class="result-hero-tools">
+              <button class="btn btn-tool" id="copyBtn" type="button" title="Copy result"><i class="fa-regular fa-copy"></i></button>
+              <button class="btn btn-tool" id="printBtn" type="button" title="Print"><i class="fa-solid fa-print"></i></button>
+              <button class="btn btn-tool" id="pdfBtn" type="button" title="Download PDF"><i class="fa-solid fa-file-arrow-down"></i></button>
+              <button class="btn btn-tool" id="shareBtn" type="button" title="Share"><i class="fa-solid fa-share-nodes"></i></button>
+            </div>
+          </div>
+
+          <!-- Income Summary -->
+          <div class="app-card mb-3">
+            <div class="app-card-header app-card-header-sm"><h3><i class="fa-solid fa-coins"></i> Income Summary</h3></div>
+            <div class="app-card-body">
+              <div class="kv-row"><span>Annual Salary Income</span><strong id="rSalaryIncome">৳0</strong></div>
+              <div class="kv-row"><span>Other Income</span><strong id="rOtherIncome">৳0</strong></div>
+              <div class="kv-row kv-total"><span>Total Income</span><strong id="rTotalIncome">৳0</strong></div>
+              <div class="kv-row"><span>Tax-Free Allowance</span><strong id="rTaxFree">৳0</strong></div>
+              <div class="kv-row kv-total"><span>Taxable Income</span><strong id="rTaxableIncome">৳0</strong></div>
+            </div>
+          </div>
+
+          <!-- Tax Summary -->
+          <div class="app-card mb-3">
+            <div class="app-card-header app-card-header-sm"><h3><i class="fa-solid fa-file-invoice-dollar"></i> Tax Summary</h3></div>
+            <div class="app-card-body">
+              <div class="kv-row"><span>Gross Tax</span><strong id="rGrossTax">৳0</strong></div>
+              <div class="kv-row kv-positive"><span>Tax Rebate</span><strong id="rRebate">− ৳0</strong></div>
+              <div class="kv-row kv-positive"><span>Tax Already Paid</span><strong id="rPaid">− ৳0</strong></div>
+              <div class="kv-row kv-positive"><span>TDS</span><strong id="rTds">− ৳0</strong></div>
+              <div class="kv-row" id="rMinTaxRow" style="display:none;"><span>Minimum Tax Applied</span><strong id="rMinTax">৳0</strong></div>
+              <div class="kv-row kv-total kv-final"><span>Net Tax Payable</span><strong id="rNetTax2">৳0</strong></div>
+            </div>
+          </div>
+
+          <!-- Charts -->
+          <div class="app-card mb-3">
+            <div class="app-card-header app-card-header-sm"><h3><i class="fa-solid fa-chart-pie"></i> Visual Breakdown</h3></div>
+            <div class="app-card-body">
+              <div class="row">
+                <div class="col-6"><canvas id="incomeChart" height="160"></canvas><p class="chart-caption">Income</p></div>
+                <div class="col-6"><canvas id="taxChart" height="160"></canvas><p class="chart-caption">Tax</p></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Salary Breakdown Table -->
+          <div class="app-card mb-3">
+            <div class="app-card-header app-card-header-sm"><h3><i class="fa-solid fa-table"></i> Income Breakdown</h3></div>
+            <div class="app-card-body p-0">
+              <table class="table app-table mb-0">
+                <thead><tr><th>Income Type</th><th class="text-end">Amount</th></tr></thead>
+                <tbody id="incomeTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tax Slab Breakdown Table -->
+          <div class="app-card mb-3">
+            <div class="app-card-header app-card-header-sm"><h3><i class="fa-solid fa-layer-group"></i> Tax Slab Breakdown</h3></div>
+            <div class="app-card-body p-0">
+              <table class="table app-table mb-0">
+                <thead><tr><th>Slab</th><th class="text-end">Taxable Amount</th><th class="text-end">Rate</th><th class="text-end">Tax</th></tr></thead>
+                <tbody id="slabTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tax Saving Suggestions -->
+          <div class="app-card mb-3 suggestion-card">
+            <div class="app-card-header app-card-header-sm"><h3><i class="fa-solid fa-lightbulb"></i> Tax Saving Suggestions</h3></div>
+            <div class="app-card-body">
+              <div class="kv-row"><span>Rebate Utilization</span><strong id="sUtilization">0%</strong></div>
+              <div class="progress mb-3" style="height:8px;">
+                <div class="progress-bar" id="sUtilizationBar" style="width:0%;"></div>
+              </div>
+              <div class="kv-row"><span>Additional Investment to Maximize Rebate</span><strong id="sAdditional">৳0</strong></div>
+              <div class="kv-row"><span>Estimated Extra Tax Saving</span><strong id="sExtraSaving">৳0</strong></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="app-footer">
+  <div class="container text-center">
+    <p class="mb-1">KorGoni &middot; Bangladesh Income Tax Calculator &mdash; {{FY}}</p>
+    <p class="text-muted-sm mb-0">Built for estimation and planning purposes only. Verify final figures with NBR or a registered tax practitioner before filing. All calculations run locally in your browser &mdash; no data leaves your device.</p>
+  </div>
+</footer>
+
+<!-- Print-only report (built dynamically, see app.js) -->
+<div id="printArea" class="d-none"></div>
+
+<!-- Toast for copy/share feedback -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="appToast" class="toast align-items-center" role="alert">
+    <div class="d-flex">
+      <div class="toast-body" id="appToastBody">Done.</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+/* =========================================================================
+   BANGLADESH INCOME TAX CONFIGURATION
+   Income Year 2025-2026 / Assessment Year 2026-2027
+   Source: National Board of Revenue (NBR), Finance Ordinance 2025
+   -------------------------------------------------------------------------
+   Update this object every fiscal year. No calculation logic lives here -
+   only numbers. The engine in calculator.js reads these values, so a new
+   budget only requires editing TAX_CONFIG.
+   ========================================================================= */
+
+const TAX_CONFIG = {
+  fiscalYear: "Income Year 2025-2026 (Assessment Year 2026-2027)",
+
+  // Tax-free threshold by taxpayer category (BDT, annual)
+  taxFreeLimits: {
+    male: 375000,
+    female: 425000,
+    third_gender: 500000,
+    senior: 425000,      // resident individual aged 65+
+    disabled: 500000,    // physically challenged person
+    freedom_fighter: 525000
+  },
+
+  // Progressive slabs applied AFTER the tax-free threshold is removed.
+  // Each slab's "limit" is the width of that bracket (not a cumulative
+  // ceiling). The final slab uses limit: null to mean "remainder".
+  slabs: [
+    { label: "First", limit: 100000, rate: 0.05 },
+    { label: "Next", limit: 400000, rate: 0.10 },
+    { label: "Next", limit: 500000, rate: 0.15 },
+    { label: "Next", limit: 500000, rate: 0.20 },
+    { label: "Next", limit: 2000000, rate: 0.25 },
+    { label: "Remaining", limit: null, rate: 0.30 }
+  ],
+
+  // Investment tax rebate (Section 78, Income Tax Act 2023)
+  rebate: {
+    rateOnInvestment: 0.15,        // 15% of eligible investment
+    capPercentOfTaxableIncome: 0.03, // eligible investment capped at 3% of taxable income
+    maxRebateAmount: 1000000       // absolute ceiling: BDT 10,00,000 (10 lakh)
+  },
+
+  // Flat minimum tax - applies once taxable income exceeds the tax-free limit
+  minimumTax: {
+    standard: 5000,
+    newTaxpayer: 1000
+  },
+
+  currency: "BDT"
+};
+
+// Freeze to prevent accidental mutation at runtime
+Object.freeze(TAX_CONFIG.taxFreeLimits);
+Object.freeze(TAX_CONFIG.rebate);
+Object.freeze(TAX_CONFIG.minimumTax);
+Object.freeze(TAX_CONFIG);
+
+</script>
+<script>
+/* =========================================================================
+   BANGLADESH INCOME TAX CALCULATION ENGINE
+   Pure functions only - no DOM access here. Reads from TAX_CONFIG so the
+   logic never needs to change when NBR updates slabs/rebates each budget.
+   ========================================================================= */
+
+const TaxEngine = (() => {
+
+  /** Round to nearest integer BDT (NBR returns are whole-taka). */
+  function round(n) {
+    return Math.round((n + Number.EPSILON) * 100) / 100;
+  }
+
+  /**
+   * STEP 1 - Build the annual income breakdown from raw form inputs.
+   * @param {object} i - raw numeric inputs (all annualized already except basicSalary which is monthly)
+   */
+  function calculateAnnualIncome(i) {
+    const salaryIncome =
+      (i.basicSalary * 12) +
+      i.houseRent +
+      i.medical +
+      i.conveyance +
+      i.festivalBonus +
+      i.performanceBonus +
+      i.overtime +
+      i.otherAllowances;
+
+    const otherIncome =
+      i.businessIncome +
+      i.rentalIncome +
+      i.freelancingIncome +
+      i.foreignIncome +
+      i.otherIncome;
+
+    const totalIncome = salaryIncome + otherIncome;
+
+    return { salaryIncome, otherIncome, totalIncome };
+  }
+
+  /**
+   * STEP 2 - Determine the applicable tax-free threshold.
+   * Priority: disabled > third_gender > senior(65+) > female > male.
+   * (Freedom fighter status, if ever exposed in the UI, would take top priority.)
+   */
+  function getTaxFreeLimit({ gender, age, isDisabled, isFreedomFighter }) {
+    const L = TAX_CONFIG.taxFreeLimits;
+    if (isFreedomFighter) return L.freedom_fighter;
+    if (isDisabled) return L.disabled;
+    if (gender === "third_gender") return L.third_gender;
+    if (age >= 65) return L.senior;
+    if (gender === "female") return L.female;
+    return L.male;
+  }
+
+  /**
+   * STEP 3 - Progressive slab calculation on taxable income.
+   * Returns gross tax plus a per-slab breakdown for the UI table.
+   */
+  function calculateSlabTax(taxableIncome) {
+    let remaining = Math.max(0, taxableIncome);
+    let grossTax = 0;
+    const breakdown = [];
+
+    for (const slab of TAX_CONFIG.slabs) {
+      if (remaining <= 0) {
+        breakdown.push({ label: slab.label, limit: slab.limit, rate: slab.rate, taxableAmount: 0, tax: 0 });
+        continue;
+      }
+      const slabWidth = slab.limit === null ? remaining : Math.min(slab.limit, remaining);
+      const slabTax = slabWidth * slab.rate;
+
+      breakdown.push({
+        label: slab.label,
+        limit: slab.limit,
+        rate: slab.rate,
+        taxableAmount: round(slabWidth),
+        tax: round(slabTax)
+      });
+
+      grossTax += slabTax;
+      remaining -= slabWidth;
+    }
+
+    return { grossTax: round(grossTax), breakdown };
+  }
+
+  /**
+   * STEP 4 - Investment tax rebate.
+   * Rebate = 15% x lowest of (actual eligible investment, 3% of taxable income, BDT 10,00,000)
+   */
+  function calculateRebate(taxableIncome, totalInvestment) {
+    const { rateOnInvestment, capPercentOfTaxableIncome, maxRebateAmount } = TAX_CONFIG.rebate;
+
+    const capByIncome = taxableIncome * capPercentOfTaxableIncome;
+    const eligibleInvestment = Math.min(totalInvestment, capByIncome, maxRebateAmount / rateOnInvestment);
+
+    let rebate = eligibleInvestment * rateOnInvestment;
+    rebate = Math.min(rebate, maxRebateAmount);
+
+    return {
+      eligibleInvestment: round(Math.max(0, eligibleInvestment)),
+      rebate: round(Math.max(0, rebate))
+    };
+  }
+
+  /**
+   * STEP 5 - Final net tax payable.
+   * Applies the flat minimum tax floor (only when taxable income > 0,
+   * i.e. income exceeds the tax-free threshold), then subtracts
+   * payments already made. Never returns below zero.
+   */
+  function calculateFinalTax({ grossTax, rebate, taxableIncome, taxAlreadyPaid, tds, isNewTaxpayer }) {
+    const taxAfterRebate = Math.max(0, grossTax - rebate);
+
+    let minTax = 0;
+    if (taxableIncome > 0) {
+      minTax = isNewTaxpayer ? TAX_CONFIG.minimumTax.newTaxpayer : TAX_CONFIG.minimumTax.standard;
+    }
+
+    const taxAfterMinimum = Math.max(taxAfterRebate, minTax > taxAfterRebate ? minTax : taxAfterRebate);
+    // Minimum tax floor only kicks in if slab tax (after rebate) is genuinely lower
+    const flooredTax = taxableIncome > 0 ? Math.max(taxAfterRebate, minTax) : taxAfterRebate;
+
+    const netTax = Math.max(0, flooredTax - taxAlreadyPaid - tds);
+
+    return {
+      taxAfterRebate: round(taxAfterRebate),
+      minimumTaxApplied: round(minTax),
+      flooredTax: round(flooredTax),
+      netTax: round(netTax)
+    };
+  }
+
+  /**
+   * Tax-saving suggestion helper - how much more investment would
+   * maximize the rebate, and the resulting extra tax saved.
+   */
+  function calculateSavingOpportunity(taxableIncome, totalInvestment) {
+    const { rateOnInvestment, capPercentOfTaxableIncome, maxRebateAmount } = TAX_CONFIG.rebate;
+    const maxEligibleByIncome = Math.min(taxableIncome * capPercentOfTaxableIncome, maxRebateAmount / rateOnInvestment);
+
+    const additionalInvestmentNeeded = Math.max(0, maxEligibleByIncome - totalInvestment);
+    const potentialExtraSaving = round(additionalInvestmentNeeded * rateOnInvestment);
+
+    const currentEligible = Math.min(totalInvestment, maxEligibleByIncome);
+    const utilizationPercent = maxEligibleByIncome > 0
+      ? round((currentEligible / maxEligibleByIncome) * 100)
+      : 0;
+
+    return {
+      maxEligibleByIncome: round(maxEligibleByIncome),
+      additionalInvestmentNeeded: round(additionalInvestmentNeeded),
+      potentialExtraSaving,
+      utilizationPercent: Math.min(100, utilizationPercent)
+    };
+  }
+
+  /**
+   * Master orchestrator - runs all 5 steps and returns one result object
+   * the UI layer can render directly.
+   */
+  function calculateFullTax(input) {
+    const { salaryIncome, otherIncome, totalIncome } = calculateAnnualIncome(input);
+
+    const taxFreeLimit = getTaxFreeLimit(input);
+    const taxableIncome = Math.max(0, totalIncome - taxFreeLimit);
+
+    const { grossTax, breakdown } = calculateSlabTax(taxableIncome);
+
+    const totalInvestment =
+      input.dps + input.lifeInsurance + input.providentFund +
+      input.approvedInvestments + input.govSavingsCertificates +
+      input.zakatDonation + input.approvedDonations;
+
+    const { eligibleInvestment, rebate } = calculateRebate(taxableIncome, totalInvestment);
+
+    const finalTax = calculateFinalTax({
+      grossTax,
+      rebate,
+      taxableIncome,
+      taxAlreadyPaid: input.taxAlreadyPaid,
+      tds: input.tdsDeducted,
+      isNewTaxpayer: input.isNewTaxpayer
+    });
+
+    const savingOpportunity = calculateSavingOpportunity(taxableIncome, totalInvestment);
+
+    return {
+      fiscalYear: TAX_CONFIG.fiscalYear,
+      salaryIncome: round(salaryIncome),
+      otherIncome: round(otherIncome),
+      totalIncome: round(totalIncome),
+      taxFreeLimit: round(taxFreeLimit),
+      taxableIncome: round(taxableIncome),
+      grossTax,
+      slabBreakdown: breakdown,
+      totalInvestment: round(totalInvestment),
+      eligibleInvestment,
+      rebate,
+      taxAlreadyPaid: round(input.taxAlreadyPaid),
+      tdsDeducted: round(input.tdsDeducted),
+      minimumTaxApplied: finalTax.minimumTaxApplied,
+      netTax: finalTax.netTax,
+      savingOpportunity
+    };
+  }
+
+  return {
+    calculateAnnualIncome,
+    getTaxFreeLimit,
+    calculateSlabTax,
+    calculateRebate,
+    calculateFinalTax,
+    calculateSavingOpportunity,
+    calculateFullTax,
+    round
+  };
+})();
+
+</script>
+<script>
+/* =========================================================================
+   KORGONI APP LOGIC
+   Handles: form reading/validation, number formatting, live calculation,
+   rendering results, charts, theme toggle, save/load, PDF/print/copy/share.
+   ========================================================================= */
+
+(() => {
+  "use strict";
+
+  const STORAGE_KEY = "korgoni_bd_tax_calc_v1";
+  const THEME_KEY = "korgoni_theme";
+
+  const moneyFieldIds = [
+    "basicSalary","houseRent","medical","conveyance","festivalBonus","performanceBonus",
+    "overtime","otherAllowances","businessIncome","rentalIncome","freelancingIncome",
+    "foreignIncome","otherIncome","dps","lifeInsurance","providentFund",
+    "approvedInvestments","govSavingsCertificates","zakatDonation","approvedDonations",
+    "taxAlreadyPaid","tdsDeducted"
+  ];
+
+  let incomeChart = null;
+  let taxChart = null;
+  let lastResult = null;
+  let lastInputsForTable = {};
+
+  /* ----------------------------- FORMAT HELPERS ----------------------------- */
+
+  function fmt(n) {
+    const v = Math.round(n || 0);
+    return "৳" + v.toLocaleString("en-IN");
+  }
+
+  function fmtPlain(n) {
+    return Math.round(n || 0).toLocaleString("en-IN");
+  }
+
+  function parseMoney(str) {
+    const cleaned = String(str || "0").replace(/[^\d.]/g, "");
+    const val = parseFloat(cleaned);
+    return isNaN(val) || val < 0 ? 0 : val;
+  }
+
+  /* ----------------------------- LIVE COMMA FORMATTING ----------------------------- */
+
+  function attachMoneyFormatting() {
+    moneyFieldIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      el.addEventListener("focus", () => {
+        const raw = parseMoney(el.value);
+        el.value = raw === 0 ? "" : String(raw);
+      });
+
+      el.addEventListener("blur", () => {
+        const raw = parseMoney(el.value);
+        el.value = fmtPlain(raw);
+        el.classList.remove("is-invalid");
+      });
+
+      el.addEventListener("input", () => {
+        const cleaned = el.value.replace(/[^\d]/g, "");
+        if (cleaned !== el.value) {
+          el.value = cleaned;
+        }
+      });
+    });
+  }
+
+  function readInputs() {
+    const get = id => parseMoney(document.getElementById(id).value);
+
+    return {
+      gender: document.getElementById("gender").value,
+      age: parseInt(document.getElementById("age").value, 10) || 0,
+      residentStatus: document.getElementById("residentStatus").value,
+      isDisabled: document.getElementById("isDisabled").checked,
+      isFreedomFighter: false,
+      isNewTaxpayer: document.getElementById("isNewTaxpayer").checked,
+
+      basicSalary: get("basicSalary"),
+      houseRent: get("houseRent"),
+      medical: get("medical"),
+      conveyance: get("conveyance"),
+      festivalBonus: get("festivalBonus"),
+      performanceBonus: get("performanceBonus"),
+      overtime: get("overtime"),
+      otherAllowances: get("otherAllowances"),
+
+      businessIncome: get("businessIncome"),
+      rentalIncome: get("rentalIncome"),
+      freelancingIncome: get("freelancingIncome"),
+      foreignIncome: get("foreignIncome"),
+      otherIncome: get("otherIncome"),
+
+      dps: get("dps"),
+      lifeInsurance: get("lifeInsurance"),
+      providentFund: get("providentFund"),
+      approvedInvestments: get("approvedInvestments"),
+      govSavingsCertificates: get("govSavingsCertificates"),
+      zakatDonation: get("zakatDonation"),
+      approvedDonations: get("approvedDonations"),
+
+      taxAlreadyPaid: get("taxAlreadyPaid"),
+      tdsDeducted: get("tdsDeducted")
+    };
+  }
+
+  /* ----------------------------- VALIDATION ----------------------------- */
+
+  function validateForm() {
+    let valid = true;
+    const age = document.getElementById("age");
+    if (!age.value || parseInt(age.value, 10) < 18 || parseInt(age.value, 10) > 100) {
+      age.classList.add("is-invalid");
+      valid = false;
+    } else {
+      age.classList.remove("is-invalid");
+    }
+
+    moneyFieldIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (parseMoney(el.value) < 0) {
+        el.classList.add("is-invalid");
+        valid = false;
+      }
+    });
+
+    return valid;
+  }
+
+  /* ----------------------------- RENDER RESULTS ----------------------------- */
+
+  function renderResults(r) {
+    document.getElementById("emptyState").classList.add("d-none");
+    document.getElementById("resultsArea").classList.remove("d-none");
+
+    document.getElementById("rNetTax").textContent = fmt(r.netTax);
+    document.getElementById("rNetTax2").textContent = fmt(r.netTax);
+
+    document.getElementById("rSalaryIncome").textContent = fmt(r.salaryIncome);
+    document.getElementById("rOtherIncome").textContent = fmt(r.otherIncome);
+    document.getElementById("rTotalIncome").textContent = fmt(r.totalIncome);
+    document.getElementById("rTaxFree").textContent = fmt(r.taxFreeLimit);
+    document.getElementById("rTaxableIncome").textContent = fmt(r.taxableIncome);
+
+    document.getElementById("rGrossTax").textContent = fmt(r.grossTax);
+    document.getElementById("rRebate").textContent = "− " + fmt(r.rebate);
+    document.getElementById("rPaid").textContent = "− " + fmt(r.taxAlreadyPaid);
+    document.getElementById("rTds").textContent = "− " + fmt(r.tdsDeducted);
+
+    const minRow = document.getElementById("rMinTaxRow");
+    if (r.minimumTaxApplied > 0 && r.minimumTaxApplied > (r.grossTax - r.rebate)) {
+      minRow.style.display = "flex";
+      document.getElementById("rMinTax").textContent = fmt(r.minimumTaxApplied);
+    } else {
+      minRow.style.display = "none";
+    }
+
+    renderIncomeTable(r);
+    renderSlabTable(r);
+    renderSuggestions(r);
+    renderCharts(r);
+  }
+
+  function renderIncomeTable() {
+    const body = document.getElementById("incomeTableBody");
+    const i = lastInputsForTable;
+    const rows = [
+      ["Salary (Basic + Allowances)", (i.basicSalary * 12) + i.houseRent + i.medical + i.conveyance + i.overtime + i.otherAllowances],
+      ["Bonus", i.festivalBonus + i.performanceBonus],
+      ["Rental", i.rentalIncome],
+      ["Freelancing", i.freelancingIncome],
+      ["Business", i.businessIncome],
+      ["Others", i.foreignIncome + i.otherIncome]
+    ];
+    body.innerHTML = rows.map(([label, amt]) =>
+      `<tr><td>${label}</td><td class="text-end"><strong>${fmt(amt)}</strong></td></tr>`
+    ).join("");
+  }
+
+  function renderSlabTable(r) {
+    const body = document.getElementById("slabTableBody");
+    body.innerHTML = r.slabBreakdown.map(s => {
+      const widthLabel = s.limit === null ? "Balance" : fmtPlain(s.limit);
+      return `<tr>
+        <td>${s.label} ${widthLabel}</td>
+        <td class="text-end">${fmt(s.taxableAmount)}</td>
+        <td class="text-end">${(s.rate * 100).toFixed(0)}%</td>
+        <td class="text-end"><strong>${fmt(s.tax)}</strong></td>
+      </tr>`;
+    }).join("");
+  }
+
+  function renderSuggestions(r) {
+    const u = r.savingOpportunity;
+    document.getElementById("sUtilization").textContent = u.utilizationPercent.toFixed(0) + "%";
+    document.getElementById("sUtilizationBar").style.width = Math.min(100, u.utilizationPercent) + "%";
+    document.getElementById("sAdditional").textContent = fmt(u.additionalInvestmentNeeded);
+    document.getElementById("sExtraSaving").textContent = fmt(u.potentialExtraSaving);
+  }
+
+  function renderCharts(r) {
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    const textColor = isDark ? "#AAB6CC" : "#4A5568";
+    const palette = ["#0F1F3D", "#C68A1F", "#1F8A5F", "#1D3461", "#A8730F", "#8993A6"];
+
+    const incomeCtx = document.getElementById("incomeChart");
+    const taxCtx = document.getElementById("taxChart");
+
+    const incomeData = {
+      labels: ["Salary Income", "Other Income"],
+      datasets: [{ data: [r.salaryIncome, r.otherIncome], backgroundColor: [palette[0], palette[1]], borderWidth: 0 }]
+    };
+
+    const taxData = {
+      labels: ["Net Tax", "Rebate", "Paid/TDS"],
+      datasets: [{
+        data: [r.netTax, r.rebate, r.taxAlreadyPaid + r.tdsDeducted],
+        backgroundColor: [palette[1], palette[2], palette[5]],
+        borderWidth: 0
+      }]
+    };
+
+    const chartOpts = {
+      plugins: {
+        legend: { position: "bottom", labels: { color: textColor, font: { size: 10 }, boxWidth: 10, padding: 8 } }
+      },
+      maintainAspectRatio: false
+    };
+
+    if (incomeChart) incomeChart.destroy();
+    if (taxChart) taxChart.destroy();
+
+    incomeChart = new Chart(incomeCtx, { type: "pie", data: incomeData, options: chartOpts });
+    taxChart = new Chart(taxCtx, { type: "doughnut", data: taxData, options: chartOpts });
+  }
+
+  /* ----------------------------- MAIN CALCULATE ----------------------------- */
+
+  function calculate() {
+    if (!validateForm()) {
+      showToast("Please fix the highlighted fields.");
+      return;
+    }
+    const inputs = readInputs();
+    lastInputsForTable = inputs;
+    const result = TaxEngine.calculateFullTax(inputs);
+    lastResult = result;
+    renderResults(result);
+    document.getElementById("resultWrapper").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  /* ----------------------------- RESET ----------------------------- */
+
+  function resetForm() {
+    document.getElementById("taxForm").reset();
+    moneyFieldIds.forEach(id => { document.getElementById(id).value = "0"; });
+    document.getElementById("emptyState").classList.remove("d-none");
+    document.getElementById("resultsArea").classList.add("d-none");
+    lastResult = null;
+    showToast("Calculator reset.");
+  }
+
+  /* ----------------------------- SAVE / LOAD ----------------------------- */
+
+  function saveCalculation() {
+    const inputs = readInputs();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(inputs));
+    showToast("Calculation saved to this device.");
+  }
+
+  function loadCalculation() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      showToast("No saved calculation found.");
+      return;
+    }
+    const data = JSON.parse(raw);
+    document.getElementById("gender").value = data.gender || "male";
+    document.getElementById("age").value = data.age || 30;
+    document.getElementById("residentStatus").value = data.residentStatus || "resident";
+    document.getElementById("isDisabled").checked = !!data.isDisabled;
+    document.getElementById("isNewTaxpayer").checked = !!data.isNewTaxpayer;
+
+    moneyFieldIds.forEach(id => {
+      if (data[id] !== undefined) document.getElementById(id).value = fmtPlain(data[id]);
+    });
+
+    showToast("Saved calculation loaded.");
+    calculate();
+  }
+
+  /* ----------------------------- THEME ----------------------------- */
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    const icon = document.querySelector("#themeToggle i");
+    icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+    localStorage.setItem(THEME_KEY, theme);
+    if (lastResult) renderCharts(lastResult);
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute("data-theme");
+    applyTheme(current === "dark" ? "light" : "dark");
+  }
+
+  /* ----------------------------- TOAST ----------------------------- */
+
+  function showToast(message) {
+    const toastEl = document.getElementById("appToast");
+    document.getElementById("appToastBody").textContent = message;
+    const toast = bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 2400 });
+    toast.show();
+  }
+
+  /* ----------------------------- COPY / SHARE / PRINT / PDF ----------------------------- */
+
+  function buildSummaryText() {
+    if (!lastResult) return "";
+    const r = lastResult;
+    return [
+      `Bangladesh Income Tax Summary — ${r.fiscalYear}`,
+      `Total Income: ${fmt(r.totalIncome)}`,
+      `Tax-Free Allowance: ${fmt(r.taxFreeLimit)}`,
+      `Taxable Income: ${fmt(r.taxableIncome)}`,
+      `Gross Tax: ${fmt(r.grossTax)}`,
+      `Tax Rebate: ${fmt(r.rebate)}`,
+      `Tax Already Paid: ${fmt(r.taxAlreadyPaid)}`,
+      `TDS Deducted: ${fmt(r.tdsDeducted)}`,
+      `Net Tax Payable: ${fmt(r.netTax)}`,
+      ``,
+      `Generated by KorGoni — for planning purposes only, verify with NBR.`
+    ].join("\n");
+  }
+
+  function copyResult() {
+    if (!lastResult) { showToast("Calculate your tax first."); return; }
+    navigator.clipboard.writeText(buildSummaryText())
+      .then(() => showToast("Result copied to clipboard."))
+      .catch(() => showToast("Could not copy. Try again."));
+  }
+
+  function shareResult() {
+    if (!lastResult) { showToast("Calculate your tax first."); return; }
+    const text = buildSummaryText();
+    if (navigator.share) {
+      navigator.share({ title: "Bangladesh Income Tax Summary", text }).catch(() => {});
+    } else {
+      copyResult();
+    }
+  }
+
+  function buildPrintHTML() {
+    const r = lastResult;
+    const slabRows = r.slabBreakdown.map(s => {
+      const widthLabel = s.limit === null ? "Balance" : fmtPlain(s.limit);
+      return `<tr><td>${s.label} ${widthLabel}</td><td style="text-align:right">${fmt(s.taxableAmount)}</td><td style="text-align:right">${(s.rate*100).toFixed(0)}%</td><td style="text-align:right">${fmt(s.tax)}</td></tr>`;
+    }).join("");
+
+    return `
+      <div style="font-family: Arial, sans-serif; color:#131B2E; padding:24px; max-width:720px;">
+        <h2 style="margin-bottom:0;">Bangladesh Income Tax Summary</h2>
+        <p style="color:#666; margin-top:4px;">${r.fiscalYear}</p>
+        <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
+          <tr><td style="padding:6px 0;">Total Income</td><td style="text-align:right; padding:6px 0;">${fmt(r.totalIncome)}</td></tr>
+          <tr><td style="padding:6px 0;">Tax-Free Allowance</td><td style="text-align:right; padding:6px 0;">${fmt(r.taxFreeLimit)}</td></tr>
+          <tr><td style="padding:6px 0; font-weight:bold;">Taxable Income</td><td style="text-align:right; padding:6px 0; font-weight:bold;">${fmt(r.taxableIncome)}</td></tr>
+        </table>
+        <h3>Tax Slab Breakdown</h3>
+        <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-size:13px;">
+          <thead><tr style="background:#ECEFF4;"><th style="text-align:left; padding:6px;">Slab</th><th style="text-align:right; padding:6px;">Taxable Amount</th><th style="text-align:right; padding:6px;">Rate</th><th style="text-align:right; padding:6px;">Tax</th></tr></thead>
+          <tbody>${slabRows}</tbody>
+        </table>
+        <table style="width:100%; border-collapse:collapse;">
+          <tr><td style="padding:6px 0;">Gross Tax</td><td style="text-align:right; padding:6px 0;">${fmt(r.grossTax)}</td></tr>
+          <tr><td style="padding:6px 0;">Tax Rebate</td><td style="text-align:right; padding:6px 0;">− ${fmt(r.rebate)}</td></tr>
+          <tr><td style="padding:6px 0;">Tax Already Paid</td><td style="text-align:right; padding:6px 0;">− ${fmt(r.taxAlreadyPaid)}</td></tr>
+          <tr><td style="padding:6px 0;">TDS Deducted</td><td style="text-align:right; padding:6px 0;">− ${fmt(r.tdsDeducted)}</td></tr>
+          <tr style="border-top:2px solid #131B2E;"><td style="padding:10px 0; font-weight:bold; font-size:16px;">Net Tax Payable</td><td style="text-align:right; padding:10px 0; font-weight:bold; font-size:16px;">${fmt(r.netTax)}</td></tr>
+        </table>
+        <p style="color:#999; font-size:11px; margin-top:24px;">Generated by KorGoni Bangladesh Income Tax Calculator. For planning purposes only — verify final figures with NBR or a registered tax practitioner before filing.</p>
+      </div>`;
+  }
+
+  function printResult() {
+    if (!lastResult) { showToast("Calculate your tax first."); return; }
+    const printArea = document.getElementById("printArea");
+    printArea.innerHTML = buildPrintHTML();
+    window.print();
+  }
+
+  function downloadPDF() {
+    if (!lastResult) { showToast("Calculate your tax first."); return; }
+    const printArea = document.getElementById("printArea");
+    printArea.innerHTML = buildPrintHTML();
+    printArea.classList.remove("d-none");
+    printArea.style.position = "fixed";
+    printArea.style.left = "-9999px";
+    printArea.style.background = "#fff";
+
+    html2canvas(printArea, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF("p", "pt", "a4");
+      const imgWidth = 595;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, imgWidth, imgHeight);
+      pdf.save("Bangladesh-Income-Tax-Summary.pdf");
+      printArea.classList.add("d-none");
+      printArea.style.position = "";
+      printArea.style.left = "";
+      showToast("PDF downloaded.");
+    }).catch(() => {
+      showToast("Could not generate PDF.");
+      printArea.classList.add("d-none");
+    });
+  }
+
+  /* ----------------------------- INIT ----------------------------- */
+
+  function init() {
+    attachMoneyFormatting();
+
+    const savedTheme = localStorage.getItem(THEME_KEY) || "light";
+    applyTheme(savedTheme);
+
+    document.getElementById("taxForm").addEventListener("submit", e => {
+      e.preventDefault();
+      calculate();
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", resetForm);
+    document.getElementById("saveBtn").addEventListener("click", saveCalculation);
+    document.getElementById("loadBtn").addEventListener("click", loadCalculation);
+    document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+
+    document.getElementById("copyBtn").addEventListener("click", copyResult);
+    document.getElementById("shareBtn").addEventListener("click", shareResult);
+    document.getElementById("printBtn").addEventListener("click", printResult);
+    document.getElementById("pdfBtn").addEventListener("click", downloadPDF);
+
+    document.querySelectorAll("footer").forEach(f => {
+      f.innerHTML = f.innerHTML.replace("{{FY}}", TAX_CONFIG.fiscalYear);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+
+</script>
+<script>
+
+/* ===== DOCUMENT UPLOAD & AI EXTRACTION (DU module) ===== */
+const DU = (() => {
+  const _docs = {};
+  const MAX = 10 * 1024 * 1024;
+
+  const S = {
+    tin: {
+      label:"TIN Certificate", badge:"badge-tin", icon:"fa-id-card",
+      fields:[
+        {k:"taxpayer_name",l:"Taxpayer Name",t:"text"},
+        {k:"tin_number",l:"TIN Number",t:"text"},
+        {k:"father_name",l:"Father's Name",t:"text"},
+        {k:"mother_name",l:"Mother's Name",t:"text"},
+        {k:"spouse_name",l:"Spouse's Name",t:"text"},
+        {k:"date_of_birth",l:"Date of Birth",t:"text"},
+        {k:"national_id",l:"National ID",t:"text"},
+        {k:"current_address",l:"Current Address",t:"area"},
+        {k:"permanent_address",l:"Permanent Address",t:"area"},
+        {k:"tax_circle",l:"Tax Circle",t:"text"},
+        {k:"tax_zone",l:"Tax Zone",t:"text"}
+      ],
+      prompt:`Extract fields from this Bangladesh TIN Certificate. Return ONLY a JSON object (no markdown, no explanation) with this exact structure where confidence is "high", "low", or "missing":
+{"taxpayer_name":{"value":"","confidence":""},"tin_number":{"value":"","confidence":""},"father_name":{"value":"","confidence":""},"mother_name":{"value":"","confidence":""},"spouse_name":{"value":"","confidence":""},"date_of_birth":{"value":"","confidence":""},"national_id":{"value":"","confidence":""},"current_address":{"value":"","confidence":""},"permanent_address":{"value":"","confidence":""},"tax_circle":{"value":"","confidence":""},"tax_zone":{"value":"","confidence":""}}`
+    },
+    salary: {
+      label:"Salary Statement", badge:"badge-salary", icon:"fa-file-lines",
+      fields:[
+        {k:"employee_name",l:"Employee Name",t:"text"},
+        {k:"employee_id",l:"Employee ID",t:"text"},
+        {k:"designation",l:"Designation",t:"text"},
+        {k:"employer_name",l:"Employer Name",t:"text"},
+        {k:"basic_salary",l:"Basic Salary/mo",t:"money"},
+        {k:"house_rent",l:"House Rent (annual)",t:"money"},
+        {k:"medical",l:"Medical (annual)",t:"money"},
+        {k:"conveyance",l:"Conveyance (annual)",t:"money"},
+        {k:"other_allowances",l:"Other Allowances",t:"money"},
+        {k:"festival_bonus",l:"Festival Bonus",t:"money"},
+        {k:"performance_bonus",l:"Perf. Bonus",t:"money"},
+        {k:"tds_deducted",l:"TDS Deducted",t:"money"}
+      ],
+      prompt:`Extract salary data from this Bangladesh payroll document. Return ONLY a JSON object (no markdown). Monetary values as plain BDT numbers (no commas/symbols). Structure:
+{"employee_name":{"value":"","confidence":""},"employee_id":{"value":"","confidence":""},"designation":{"value":"","confidence":""},"employer_name":{"value":"","confidence":""},"basic_salary":{"value":0,"confidence":""},"house_rent":{"value":0,"confidence":""},"medical":{"value":0,"confidence":""},"conveyance":{"value":0,"confidence":""},"other_allowances":{"value":0,"confidence":""},"festival_bonus":{"value":0,"confidence":""},"performance_bonus":{"value":0,"confidence":""},"tds_deducted":{"value":0,"confidence":""}}`
+    },
+    bank: {
+      label:"Bank Statement", badge:"badge-bank", icon:"fa-building-columns",
+      fields:[
+        {k:"bank_name",l:"Bank Name",t:"text"},
+        {k:"account_number",l:"Account Number",t:"text"},
+        {k:"statement_period",l:"Statement Period",t:"text"},
+        {k:"closing_balance",l:"Closing Balance",t:"money"},
+        {k:"interest_earned",l:"Interest Earned",t:"money"},
+        {k:"total_credits",l:"Total Credits",t:"money"},
+        {k:"total_debits",l:"Total Debits",t:"money"},
+        {k:"fdr_interest",l:"FDR Interest",t:"money"}
+      ],
+      prompt:`Extract data from this Bangladesh bank statement. Return ONLY a JSON object (no markdown). Monetary values as plain BDT numbers. Structure:
+{"bank_name":{"value":"","confidence":""},"account_number":{"value":"","confidence":""},"statement_period":{"value":"","confidence":""},"closing_balance":{"value":0,"confidence":""},"interest_earned":{"value":0,"confidence":""},"total_credits":{"value":0,"confidence":""},"total_debits":{"value":0,"confidence":""},"fdr_interest":{"value":0,"confidence":""}}`
+    },
+    gpf: {
+      label:"GPF Statement", badge:"badge-gpf", icon:"fa-piggy-bank",
+      fields:[
+        {k:"employee_name",l:"Employee Name",t:"text"},
+        {k:"gpf_account_number",l:"GPF Account No",t:"text"},
+        {k:"opening_balance",l:"Opening Balance",t:"money"},
+        {k:"monthly_contributions",l:"Monthly Contrib.",t:"money"},
+        {k:"employer_contributions",l:"Employer Contrib.",t:"money"},
+        {k:"interest_credited",l:"Interest Credited",t:"money"},
+        {k:"withdrawals",l:"Withdrawals",t:"money"},
+        {k:"closing_balance",l:"Closing Balance",t:"money"}
+      ],
+      prompt:`Extract data from this Bangladesh GPF statement. Return ONLY a JSON object (no markdown). Monetary values as plain BDT numbers. Structure:
+{"employee_name":{"value":"","confidence":""},"gpf_account_number":{"value":"","confidence":""},"opening_balance":{"value":0,"confidence":""},"monthly_contributions":{"value":0,"confidence":""},"employer_contributions":{"value":0,"confidence":""},"interest_credited":{"value":0,"confidence":""},"withdrawals":{"value":0,"confidence":""},"closing_balance":{"value":0,"confidence":""}}`
+    }
+  };
+
+  function toB64(file){
+    return new Promise((res,rej)=>{
+      const r=new FileReader();
+      r.onload=()=>res(r.result.split(",")[1]);
+      r.onerror=()=>rej(new Error("Read failed"));
+      r.readAsDataURL(file);
+    });
+  }
+
+  function mimeOf(file){
+    const e=file.name.split(".").pop().toLowerCase();
+    if(e==="pdf") return "application/pdf";
+    if(["jpg","jpeg"].includes(e)) return "image/jpeg";
+    if(e==="png") return "image/png";
+    if(e==="webp") return "image/webp";
+    return file.type||"application/octet-stream";
+  }
+
+  async function sheetText(file){
+    return new Promise((res,rej)=>{
+      const r=new FileReader();
+      r.onload=e=>{
+        try{
+          if(window.XLSX){
+            const wb=XLSX.read(e.target.result,{type:"array"});
+            let t="";
+            wb.SheetNames.forEach(n=>{t+="\nSheet:"+n+"\n"+XLSX.utils.sheet_to_csv(wb.Sheets[n]);});
+            res(t);
+          } else res(new TextDecoder().decode(e.target.result));
+        }catch(err){rej(new Error("Parse error: "+err.message));}
+      };
+      r.onerror=()=>rej(new Error("Read failed"));
+      r.readAsArrayBuffer(file);
+    });
+  }
+
+  function proc(type,html){
+    document.getElementById("proc-"+type).classList.add("active");
+    document.getElementById("ps-"+type).innerHTML=html;
+    document.getElementById("rv-"+type).classList.remove("active");
+    document.getElementById("err-"+type).classList.remove("active");
+  }
+
+  function err(type,msg){
+    document.getElementById("proc-"+type).classList.remove("active");
+    const el=document.getElementById("err-"+type);
+    el.classList.add("active");
+    document.getElementById("em-"+type).textContent=msg;
+  }
+
+  function buildReview(type,data){
+    document.getElementById("proc-"+type).classList.remove("active");
+    document.getElementById("err-"+type).classList.remove("active");
+    const ef=document.getElementById("ef-"+type);
+    ef.innerHTML="";
+    S[type].fields.forEach(f=>{
+      const entry=data[f.k]||{value:"",confidence:"missing"};
+      const val=entry.value!=null?entry.value:"";
+      const conf=entry.confidence||"missing";
+      const low=conf!=="high";
+      const cc=conf==="high"?"conf-ok":conf==="low"?"conf-warn":"conf-miss";
+      const cl=conf==="high"?"\u2713 OK":conf==="low"?"\u26a0 Check":"\u2717 Missing";
+      const sv=String(val).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+      const inp=f.t==="area"
+        ?`<textarea class="ext-input" data-k="${f.k}" rows="2">${sv}</textarea>`
+        :`<input type="text" class="ext-input" data-k="${f.k}" value="${sv}">`;
+      ef.innerHTML+=`<div class="ext-field${low?" low-conf":""}">
+        <span class="ext-label">${f.l}</span>${inp}
+        <span class="conf-badge ${cc}">${cl}</span></div>`;
+    });
+    document.getElementById("rv-"+type).classList.add("active");
+  }
+
+  async function upload(type,file){
+    if(!file) return;
+    if(file.size>MAX){err(type,"File too large ("+(file.size/1024/1024).toFixed(1)+"MB). Max 10MB.");return;}
+    const ext=file.name.split(".").pop().toLowerCase();
+    const isSheet=["xlsx","xls","csv"].includes(ext);
+    const mime=mimeOf(file);
+    const isPdf=mime==="application/pdf";
+    const isImg=mime.startsWith("image/");
+    if(!isPdf&&!isImg&&!isSheet){err(type,"Unsupported format. Use PDF, JPG, PNG, or Excel/CSV.");return;}
+
+    _docs[type]={name:file.name,size:file.size,type,at:new Date()};
+    proc(type,"<strong>Reading file\u2026</strong>");
+
+    try{
+      let content;
+      if(isSheet){
+        proc(type,"<strong>Parsing spreadsheet\u2026</strong>");
+        const text=await sheetText(file);
+        content=[{type:"text",text:S[type].prompt},{type:"text",text:"\n"+text.substring(0,15000)}];
+      } else {
+        proc(type,"<strong>Encoding document\u2026</strong>");
+        const b64=await toB64(file);
+        if(isPdf){
+          content=[{type:"text",text:S[type].prompt},{type:"document",source:{type:"base64",media_type:"application/pdf",data:b64}}];
+        } else {
+          content=[{type:"text",text:S[type].prompt},{type:"image",source:{type:"base64",media_type:mime,data:b64}}];
+        }
+      }
+      proc(type,"<strong>AI is extracting data\u2026</strong> This takes a few seconds.");
+
+      const res=await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,messages:[{role:"user",content}]})
+      });
+      if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error((e.error&&e.error.message)||"API "+res.status);}
+      const d=await res.json();
+      const raw=d.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+      const clean=raw.replace(/^```(?:json)?\n?/,"").replace(/\n?```$/,"").trim();
+      const extracted=JSON.parse(clean);
+      buildReview(type,extracted);
+      updateLib();
+    }catch(e){
+      let m=e.message||"Unknown error";
+      if(m.includes("JSON")) m="AI returned unexpected data. Try a clearer scan of the document.";
+      if(m.includes("401")) m="Anthropic API key not found. Check your deployment setup.";
+      if(m.includes("529")||m.includes("overloaded")) m="AI service is busy. Please try again shortly.";
+      err(type,m);
+    }
+  }
+
+  function clear(type){
+    document.getElementById("rv-"+type).classList.remove("active");
+    document.getElementById("proc-"+type).classList.remove("active");
+    document.getElementById("err-"+type).classList.remove("active");
+    const fi=document.getElementById("file-"+type);
+    if(fi) fi.value="";
+  }
+
+  function apply(type){
+    const ef=document.getElementById("ef-"+type);
+    const inputs=ef.querySelectorAll(".ext-input");
+    const data={};
+    inputs.forEach(el=>{data[el.dataset.k]=el.value;});
+
+    const num=v=>{const n=parseFloat(String(v).replace(/[^0-9.]/g,""));return isNaN(n)?0:Math.round(n);};
+    const set=(id,val)=>{
+      const el=document.getElementById(id);
+      if(!el) return;
+      const s=typeof val==="number"?String(val):val;
+      if(!s||s==="0") return;
+      el.value=s;
+      el.classList.add("is-valid");
+      setTimeout(()=>el.classList.remove("is-valid"),2500);
+    };
+
+    if(type==="tin"){
+      const card=document.getElementById("tinExtraCard");
+      card.classList.add("visible"); card.style.display="block";
+      set("tinName",data.taxpayer_name); set("tinNumber",data.tin_number);
+      set("tinFather",data.father_name); set("tinMother",data.mother_name);
+      set("tinSpouse",data.spouse_name); set("tinDob",data.date_of_birth);
+      set("tinNid",data.national_id);    set("tinAddress",data.current_address);
+      set("tinPermAddress",data.permanent_address);
+      set("tinCircle",data.tax_circle); set("tinZone",data.tax_zone);
+    }
+    if(type==="salary"){
+      set("basicSalary",num(data.basic_salary));      set("houseRent",num(data.house_rent));
+      set("medical",num(data.medical));               set("conveyance",num(data.conveyance));
+      set("otherAllowances",num(data.other_allowances));
+      set("festivalBonus",num(data.festival_bonus));  set("performanceBonus",num(data.performance_bonus));
+      set("tdsDeducted",num(data.tds_deducted));
+    }
+    if(type==="bank"){
+      const interest=num(data.interest_earned)+num(data.fdr_interest);
+      if(interest>0) set("otherIncome",interest);
+    }
+    if(type==="gpf"){
+      set("providentFund",num(data.monthly_contributions));
+    }
+    const count=Object.values(data).filter(v=>v&&v!=="0").length;
+    if(typeof showToast==="function") showToast("Applied "+count+" fields from "+S[type].label+" to the form.");
+  }
+
+  function updateLib(){
+    const docs=Object.values(_docs).filter(Boolean);
+    const wrap=document.getElementById("docLib");
+    const list=document.getElementById("docLibList");
+    if(!docs.length){wrap.style.display="none";return;}
+    wrap.style.display="block";
+    list.innerHTML=docs.map(d=>{
+      const sc=S[d.type];
+      return `<div class="doc-item">
+        <i class="fa-solid ${sc.icon} doc-item-icon"></i>
+        <div class="doc-item-info">
+          <div class="doc-item-name">${d.name}</div>
+          <div class="doc-item-meta">${(d.size/1024).toFixed(0)}KB &middot; ${d.at.toLocaleTimeString()} &middot;
+            <span class="doc-type-badge ${sc.badge}">${sc.label}</span></div>
+        </div>
+        <div class="doc-item-btns">
+          <button class="doc-item-btn" title="Go to tab" onclick="DU.goTab('${d.type}')"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+          <button class="doc-item-btn del" title="Remove" onclick="DU.remove('${d.type}')"><i class="fa-solid fa-trash"></i></button>
+        </div></div>`;
+    }).join("");
+  }
+
+  function remove(type){
+    delete _docs[type]; clear(type); updateLib();
+    if(typeof showToast==="function") showToast("Document removed.");
+  }
+
+  function goTab(type){
+    document.querySelectorAll(".upload-tab").forEach(t=>t.classList.remove("active"));
+    document.querySelectorAll(".upload-tab-panel").forEach(p=>p.classList.add("d-none"));
+    document.querySelector(`.upload-tab[data-tab="${type}"]`).classList.add("active");
+    document.getElementById("tabp-"+type).classList.remove("d-none");
+  }
+
+  function init(){
+    // Tab switching
+    document.querySelectorAll(".upload-tab").forEach(tab=>{
+      tab.addEventListener("click",()=>goTab(tab.dataset.tab));
+    });
+    // File input change events
+    ["tin","salary","bank","gpf"].forEach(type=>{
+      const fi=document.getElementById("file-"+type);
+      if(fi) fi.addEventListener("change",()=>{ if(fi.files[0]) upload(type,fi.files[0]); });
+      // Drag and drop
+      const dz=document.getElementById("dz-"+type);
+      if(dz){
+        dz.addEventListener("dragover",e=>{e.preventDefault();dz.classList.add("dragover");});
+        dz.addEventListener("dragleave",()=>dz.classList.remove("dragover"));
+        dz.addEventListener("drop",e=>{
+          e.preventDefault(); dz.classList.remove("dragover");
+          if(e.dataTransfer.files[0]) upload(type,e.dataTransfer.files[0]);
+        });
+      }
+    });
+  }
+
+  return {init,clear,apply,remove,goTab};
+})();
+
+document.addEventListener("DOMContentLoaded",()=>DU.init());
+
+
+/* ===== TIN UPLOAD MODULE =====
+   Handles TIN certificate upload (PDF or image) inside the Personal
+   Information card. Calls Claude API to extract personal details and
+   auto-fills all fields. Manual editing always works regardless.
+*/
+const TinUpload = (() => {
+  const MAX = 10 * 1024 * 1024;
+
+  // Map extracted keys → form field IDs
+  const FIELD_MAP = {
+    taxpayer_name:     "taxpayerName",
+    tin_number:        "tinNumber",
+    father_name:       "fatherName",
+    mother_name:       "motherName",
+    spouse_name:       "spouseName",
+    date_of_birth:     "dob",
+    national_id:       "nid",
+    tax_circle:        "taxCircle",
+    tax_zone:          "taxZone",
+    current_address:   "currentAddress",
+    permanent_address: "permanentAddress",
+    gender:            "gender",   // "male" / "female" / "third_gender"
+    age:               "age",      // numeric string
+  };
+
+  const PROMPT = `You are an expert OCR assistant for Bangladesh TIN (Taxpayer Identification Number) certificates.
+Extract the following fields from the uploaded document and return ONLY a valid JSON object — no markdown, no explanation, no code fences.
+
+JSON structure (use empty string if not found, confidence: "high" | "low" | "missing"):
+{
+  "taxpayer_name":     {"value": "", "confidence": ""},
+  "tin_number":        {"value": "", "confidence": ""},
+  "father_name":       {"value": "", "confidence": ""},
+  "mother_name":       {"value": "", "confidence": ""},
+  "spouse_name":       {"value": "", "confidence": ""},
+  "date_of_birth":     {"value": "", "confidence": ""},
+  "national_id":       {"value": "", "confidence": ""},
+  "tax_circle":        {"value": "", "confidence": ""},
+  "tax_zone":          {"value": "", "confidence": ""},
+  "current_address":   {"value": "", "confidence": ""},
+  "permanent_address": {"value": "", "confidence": ""},
+  "gender":            {"value": "", "confidence": ""},
+  "age":               {"value": "", "confidence": ""}
+}
+
+For gender: use exactly "male", "female", or "third_gender".
+For age: calculate from date of birth if not explicitly stated — return as a plain number string e.g. "35".
+Return ONLY the JSON object.`;
+
+  function mimeOf(file) {
+    const e = file.name.split(".").pop().toLowerCase();
+    if (e === "pdf") return "application/pdf";
+    if (["jpg","jpeg"].includes(e)) return "image/jpeg";
+    if (e === "png") return "image/png";
+    if (e === "webp") return "image/webp";
+    return file.type || "application/octet-stream";
+  }
+
+  function toB64(file) {
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(r.result.split(",")[1]);
+      r.onerror = () => rej(new Error("File read failed"));
+      r.readAsDataURL(file);
+    });
+  }
+
+  function setProc(msg) {
+    document.getElementById("tinProc").classList.add("active");
+    document.getElementById("tinProcText").innerHTML = msg;
+    document.getElementById("tinErr").classList.remove("active");
+    document.getElementById("tinSuccessBar").classList.remove("active");
+  }
+
+  function setErr(msg) {
+    document.getElementById("tinProc").classList.remove("active");
+    document.getElementById("tinErr").classList.add("active");
+    document.getElementById("tinErrMsg").textContent = msg;
+    document.getElementById("tinSuccessBar").classList.remove("active");
+    document.getElementById("tinUploadZone").classList.remove("has-file");
+  }
+
+  function setSuccess() {
+    document.getElementById("tinProc").classList.remove("active");
+    document.getElementById("tinErr").classList.remove("active");
+    document.getElementById("tinSuccessBar").classList.add("active");
+    document.getElementById("tinUploadZone").classList.add("has-file");
+    const icon = document.querySelector("#tinUploadZone .uz-icon i");
+    if (icon) { icon.className = "fa-solid fa-circle-check"; }
+    const title = document.querySelector("#tinUploadZone .uz-title");
+    if (title) title.textContent = "TIN Certificate loaded";
+  }
+
+  function flashField(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add("field-autofilled");
+    setTimeout(() => el.classList.remove("field-autofilled"), 3000);
+  }
+
+  function applyData(data) {
+    let filled = 0;
+    Object.entries(FIELD_MAP).forEach(([key, fieldId]) => {
+      const entry = data[key];
+      if (!entry || entry.confidence === "missing" || !entry.value) return;
+      const el = document.getElementById(fieldId);
+      if (!el) return;
+      const val = String(entry.value).trim();
+      if (!val) return;
+
+      // Handle select elements (gender)
+      if (el.tagName === "SELECT") {
+        const opt = Array.from(el.options).find(o => o.value === val.toLowerCase());
+        if (opt) { el.value = opt.value; flashField(fieldId); filled++; }
+        return;
+      }
+      // Handle number input (age)
+      if (el.type === "number") {
+        const n = parseInt(val, 10);
+        if (!isNaN(n) && n >= 1 && n <= 120) { el.value = n; flashField(fieldId); filled++; }
+        return;
+      }
+      el.value = val;
+      flashField(fieldId);
+      filled++;
+    });
+    return filled;
+  }
+
+  async function handleFile(file) {
+    if (!file) return;
+    if (file.size > MAX) {
+      setErr("File too large (" + (file.size/1024/1024).toFixed(1) + " MB). Max is 10 MB.");
+      return;
+    }
+    const mime = mimeOf(file);
+    const isPdf = mime === "application/pdf";
+    const isImg = mime.startsWith("image/");
+    if (!isPdf && !isImg) {
+      setErr("Unsupported format. Please upload a PDF or an image (JPG, PNG).");
+      return;
+    }
+
+    setProc("<strong>Reading document…</strong>");
+
+    try {
+      setProc("<strong>Encoding document…</strong>");
+      const b64 = await toB64(file);
+
+      let docContent;
+      if (isPdf) {
+        docContent = { type: "document", source: { type: "base64", media_type: "application/pdf", data: b64 } };
+      } else {
+        docContent = { type: "image", source: { type: "base64", media_type: mime, data: b64 } };
+      }
+
+      setProc("<strong>Extracting personal information…</strong> AI is reading your TIN certificate.");
+
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-6",
+          max_tokens: 800,
+          messages: [{ role: "user", content: [{ type: "text", text: PROMPT }, docContent] }]
+        })
+      });
+
+      if (!res.ok) {
+        const e = await res.json().catch(() => ({}));
+        throw new Error((e.error && e.error.message) || "API error " + res.status);
+      }
+
+      const apiData = await res.json();
+      const rawText = apiData.content
+        .filter(b => b.type === "text")
+        .map(b => b.text)
+        .join("");
+
+      const clean = rawText.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "").trim();
+      const extracted = JSON.parse(clean);
+      const filledCount = applyData(extracted);
+      setSuccess();
+      if (typeof showToast === "function") {
+        showToast("\u2713 Auto-filled " + filledCount + " fields from your TIN certificate.");
+      }
+
+    } catch(e) {
+      let msg = e.message || "Unknown error";
+      if (msg.includes("JSON")) msg = "Could not parse AI response. Try a higher-quality scan of the certificate.";
+      if (msg.includes("401")) msg = "Anthropic API key missing. See the deployment guide for setup instructions.";
+      if (msg.includes("529") || msg.includes("overloaded")) msg = "AI service is busy. Please wait a moment and try again.";
+      setErr(msg);
+    }
+  }
+
+  function clear() {
+    // Reset upload zone
+    document.getElementById("tinFile").value = "";
+    document.getElementById("tinUploadZone").classList.remove("has-file","dragover");
+    document.getElementById("tinProc").classList.remove("active");
+    document.getElementById("tinErr").classList.remove("active");
+    document.getElementById("tinSuccessBar").classList.remove("active");
+    const icon = document.querySelector("#tinUploadZone .uz-icon i");
+    if (icon) icon.className = "fa-solid fa-cloud-arrow-up";
+    const title = document.querySelector("#tinUploadZone .uz-title");
+    if (title) title.textContent = "Upload TIN Certificate PDF or Image";
+    // Clear all personal fields
+    ["taxpayerName","tinNumber","fatherName","motherName","spouseName",
+     "dob","nid","taxCircle","taxZone","currentAddress","permanentAddress"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = "";
+    });
+    document.getElementById("gender").value = "male";
+    document.getElementById("age").value = "30";
+    if (typeof showToast === "function") showToast("TIN data cleared.");
+  }
+
+  function init() {
+    const fileInput = document.getElementById("tinFile");
+    const dropZone  = document.getElementById("tinUploadZone");
+
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files[0]) handleFile(fileInput.files[0]);
+    });
+
+    dropZone.addEventListener("dragover", e => {
+      e.preventDefault();
+      dropZone.classList.add("dragover");
+    });
+    dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragover"));
+    dropZone.addEventListener("drop", e => {
+      e.preventDefault();
+      dropZone.classList.remove("dragover");
+      if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    });
+  }
+
+  return { init, clear, handleFile };
+})();
+
+document.addEventListener("DOMContentLoaded", () => TinUpload.init());
+
+</script>
+</body>
+</html>
